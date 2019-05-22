@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char[] ADD = "ADD";
-const char[] REMOVE = "REMOVE";
-const char[] SHOW = "SHOW";
+#define ADD = "ADD";
+#define REMOVE = "REMOVE";
+#define SHOW = "SHOW";
 
 int main(int argc, char* argv[]) {
 	// Ilustrando uso de argumentos de programa
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
-void readLine(char[] line, char* command, char* name) {
+void readLine(char line[], char* command, char* name) {
     int i = 0;
     int length = strlen(line);
     while (line[i] != ' ') {
@@ -40,13 +40,14 @@ void readLine(char[] line, char* command, char* name) {
     for (i; i < length; i++) {
         strcat(line[i], name);
     }
+    return 0;
 }
 
-void printLine(char[] line) {
-
+void printLine(char line[]) {
+    return 0;
 }
 
-bool executeCommand(char[] command, char[] name) {
+bool executeCommand(char command[], char name[]) {
     switch (command) {
         case ADD:
             add(name);
@@ -62,14 +63,14 @@ bool executeCommand(char[] command, char[] name) {
     }
 }
 
-void add(char[] nome) {
+void addName(char name[]) {
 
 }
 
-void remove(char[] nome) {
+void removeName(char name[]) {
 
 }
 
-void show(char[] nome) {
+void showName(char name[]) {
 
 }
