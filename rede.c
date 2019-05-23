@@ -25,6 +25,7 @@ void readLine(char *line, char *command, char *name) {
     }
     for (i; i < length; i++) {
         strcat(dummy, name);
+        dummy++;
     }
 }
 
@@ -32,23 +33,10 @@ void printLine(char line[]) {
     
 }
 
-bool executeCommand(char command[], char name[], element *head) {
-    if (strcmp(command, addCommand) == 0) {
-        return addName(name, &head);
-    } else if (strcmp(command, removeCommand) == 0) {
-        return removeName(name, &head);
-    } else if (strcmp(command, showCommand) == 0) {
-        return showName(name, &head);
-    }
-}
-
-bool addName(char name[], element *head) {
-    element person = { NULL, NULL, name};
-    if (head == NULL) {
-        person.next = &person;
-        person.previous = &person;
-    } else {
-        person.next = &head;
+bool addName(char *name, element *head) {
+    element person = { &person, &person, *name};
+    if (head != NULL) {
+        person.next = head;
         person.previous = head->previous;
         head->previous = &person;
     }
@@ -63,6 +51,16 @@ bool showName(char name[], element *head) {
 
 }
 
+bool executeCommand(char command[], char name[], element *head) {
+    if (strcmp(command, addCommand) == 0) {
+        return addName(name, head);
+    } else if (strcmp(command, removeCommand) == 0) {
+        return removeName(name, head);
+    } else if (strcmp(command, showCommand) == 0) {
+        return showName(name, head);
+    }
+}
+
 int main(int argc, char* argv[]) {
 	// Ilustrando uso de argumentos de programa
 	printf("#ARGS = %i\n", argc);
@@ -72,15 +70,18 @@ int main(int argc, char* argv[]) {
 	FILE* input = fopen(argv[1], "r");
 	FILE* output = fopen(argv[2], "w");
     // Ler linhas do arquivo
-    char * line = NULL;
+    char *line = NULL;
     size_t len = 0;
     ssize_t read;
     char command[6];
     char name[50];
     element *head = malloc(sizeof(element));
     while ((read = getline(&line, &len, input)) != -1) {
-        readLine(line, &command, &name);
-        fprintf(output, strcat("lido: ", line));
+        readLine(line, command, name);
+        printf("line = %s\n", line);
+        printf("command = %s\n", command);
+        printf("name = %s\n", name);
+        fprintf(output, command);
     }
 	// ...
 	// Fechando arquivos
