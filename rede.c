@@ -1,9 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h> 
+#include <string.h>
 
-#define ADD = "ADD";
-#define REMOVE = "REMOVE";
-#define SHOW = "SHOW";
+static const char *addCommand = "ADD";
+static const char *removeCommand = "REMOVE";
+static const char *showCommand = "SHOW";
+
+struct element {
+    struct element *next;
+    struct element *previous;
+    char name[50];
+} typedef element;
+
+void readLine(char *line, char *command, char *name) {
+    char *dummy = line;
+    int i = 0;
+    int length = strlen(line);
+    while (*dummy != ' ') {
+        strcat(dummy, command);
+        dummy++;
+        i++;
+    }
+    for (i; i < length; i++) {
+        strcat(dummy, name);
+    }
+}
+
+void printLine(char line[]) {
+    
+}
+
+bool executeCommand(char command[], char name[], element *head) {
+    if (strcmp(command, addCommand) == 0) {
+        return addName(name, &head);
+    } else if (strcmp(command, removeCommand) == 0) {
+        return removeName(name, &head);
+    } else if (strcmp(command, showCommand) == 0) {
+        return showName(name, &head);
+    }
+}
+
+bool addName(char name[], element *head) {
+    element person = { NULL, NULL, name};
+    if (head == NULL) {
+        person.next = &person;
+        person.previous = &person;
+    } else {
+        person.next = &head;
+        person.previous = head->previous;
+        head->previous = &person;
+    }
+    return true;
+}
+
+bool removeName(char name[], element *head) {
+
+}
+
+bool showName(char name[], element *head) {
+
+}
 
 int main(int argc, char* argv[]) {
 	// Ilustrando uso de argumentos de programa
@@ -17,10 +75,12 @@ int main(int argc, char* argv[]) {
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
-    char[6] command;
-    char[50] name;
+    char command[6];
+    char name[50];
+    element *head = malloc(sizeof(element));
     while ((read = getline(&line, &len, input)) != -1) {
         readLine(line, &command, &name);
+        fprintf(output, strcat("lido: ", line));
     }
 	// ...
 	// Fechando arquivos
@@ -28,49 +88,4 @@ int main(int argc, char* argv[]) {
 	fclose(output);
 	// Finalizando programa
 	return 0;
-}
-
-void readLine(char line[], char* command, char* name) {
-    int i = 0;
-    int length = strlen(line);
-    while (line[i] != ' ') {
-        strcat(line[i], command);
-        i++;
-    }
-    for (i; i < length; i++) {
-        strcat(line[i], name);
-    }
-    return 0;
-}
-
-void printLine(char line[]) {
-    return 0;
-}
-
-bool executeCommand(char command[], char name[]) {
-    switch (command) {
-        case ADD:
-            add(name);
-            break;
-        case REMOVE:
-            remove(name);
-            break;
-        case SHOW:
-            show(name);
-            break;
-        default:
-            break;
-    }
-}
-
-void addName(char name[]) {
-
-}
-
-void removeName(char name[]) {
-
-}
-
-void showName(char name[]) {
-
 }
