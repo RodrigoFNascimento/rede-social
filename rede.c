@@ -14,19 +14,22 @@ struct element {
     char name[50];
 } typedef element;
 
+void splitString(char *original, char *first, char *second, char *character) {
+    char* token;
+    token = strtok(original, character);
+    strcpy(first, token);
+    token = strtok(NULL, character);
+    strcpy(second, "");
+    while (token != NULL) {
+        strcat(second, token);
+        strcat(second, " ");
+        token = strtok(NULL, character);
+    }
+}
+
 void readLine(char *line, char *command, char *name) {
-    char *dummy = line;
-    int i = 0;
-    int length = strlen(line);
-    while (*dummy != ' ') {
-        strcat(dummy, command);
-        dummy++;
-        i++;
-    }
-    for (i; i < length; i++) {
-        strcat(dummy, name);
-        dummy++;
-    }
+    char *split = " ";
+    splitString(line, command, name, split);
 }
 
 void printLine(char line[]) {
@@ -62,10 +65,6 @@ bool executeCommand(char command[], char name[], element *head) {
 }
 
 int main(int argc, char* argv[]) {
-	// Ilustrando uso de argumentos de programa
-	printf("#ARGS = %i\n", argc);
-	printf("PROGRAMA = %s\n", argv[0]);
-	printf("ARG1 = %s, ARG2 = %s\n", argv[1], argv[2]);
 	// Abrindo arquivos
 	FILE* input = fopen(argv[1], "r");
 	FILE* output = fopen(argv[2], "w");
@@ -73,14 +72,12 @@ int main(int argc, char* argv[]) {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
-    char command[6];
-    char name[50];
+    char command[7];
+    char name[51];
     element *head = malloc(sizeof(element));
     while ((read = getline(&line, &len, input)) != -1) {
         readLine(line, command, name);
-        printf("line = %s\n", line);
-        printf("command = %s\n", command);
-        printf("name = %s\n", name);
+        executeCommand(command, name, head);
         fprintf(output, command);
     }
 	// ...
