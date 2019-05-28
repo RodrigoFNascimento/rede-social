@@ -11,7 +11,7 @@ static const char *showCommand = "SHOW";
 struct element {
     struct element *next;
     struct element *previous;
-    char name[50];
+    char name[51];
 } typedef element;
 
 void splitString(char *original, char *first, char *second, char *character) {
@@ -36,25 +36,25 @@ void printLine(char line[]) {
     
 }
 
-bool addName(char *name, element *head) {
-    element person = { &person, &person, *name};
-    if (head != NULL) {
-        person.next = head;
-        person.previous = head->previous;
-        head->previous = &person;
+element* addName(char *name, element *list) {
+    if (list == NULL) {
+        list = malloc(sizeof(element));
+        strcpy(list->name, name);
+        list->next = list;
+        list->previous = list;
     }
-    return true;
+    return list;
 }
 
-bool removeName(char name[], element *head) {
-
+element* removeName(char *name, element *list) {
+    return list;
 }
 
-bool showName(char name[], element *head) {
-
+element* showName(char *name, element *list) {
+    return list;
 }
 
-bool executeCommand(char command[], char name[], element *head) {
+element* executeCommand(char command[], char name[], element *head) {
     if (strcmp(command, addCommand) == 0) {
         return addName(name, head);
     } else if (strcmp(command, removeCommand) == 0) {
@@ -74,11 +74,11 @@ int main(int argc, char* argv[]) {
     ssize_t read;
     char command[7];
     char name[51];
-    element *head = malloc(sizeof(element));
+    element *list = NULL;
     while ((read = getline(&line, &len, input)) != -1) {
         readLine(line, command, name);
-        executeCommand(command, name, head);
-        fprintf(output, command);
+        list = executeCommand(command, name, list);
+        fprintf(output, list->name);
     }
 	// ...
 	// Fechando arquivos
