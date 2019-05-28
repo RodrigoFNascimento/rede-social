@@ -42,8 +42,15 @@ element* addName(char *name, element *list) {
         strcpy(list->name, name);
         list->next = list;
         list->previous = list;
+        return list;
+    } else {
+        element *person = NULL;
+        person = malloc(sizeof(element));
+        strcpy(person->name, name);
+        person->next = list;
+        person->previous = list->previous;
+        return person;
     }
-    return list;
 }
 
 element* removeName(char *name, element *list) {
