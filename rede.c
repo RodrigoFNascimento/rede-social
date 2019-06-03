@@ -120,14 +120,15 @@ element* removeName(char *name, element *list, FILE* output) {
                 trash = temp;
                 temp->previous->next = temp->next;
                 temp->next->previous = temp->previous;
+                temp = temp->next;
                 free(trash);
                 fprintf(output, "[ OK  ] REMOVE ");
                 fprintf(output, name);
                 fprintf(output, "\n");
                 i = 1;
-                //return temp;
+            } else {
+                temp = temp->next;
             }
-            temp = temp->next;
         } 
         while (temp != NULL && temp != list && i == 0); 
     }
@@ -199,7 +200,7 @@ int main(int argc, char* argv[]) {
         readLine(line, command, name);
         list = executeCommand(command, name, list, output);
     }
-    printList(list);
+    //printList(list);
 	// ...
 	// Fechando arquivos
 	fclose(input);
