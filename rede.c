@@ -19,6 +19,14 @@ void removeLastCharacter(char* string, int n) {
     string[strlen(string)-n] = 0;
 }
 
+void removeLineBreak(char* string) {
+    int len = strlen(string);
+    for (int i = 0; i < len; i++) {
+        if (string[i] == '\n')
+            string[i] = '\0';
+    }
+}
+
 // Splits original in two on the first occurence of character
 // and attributes the result strings to first and second
 void splitString(char *original, char *first, char *second, char *character) {
@@ -32,7 +40,8 @@ void splitString(char *original, char *first, char *second, char *character) {
         strcat(second, " ");
         token = strtok(NULL, character);
     }
-    removeLastCharacter(second, 2);
+    removeLastCharacter(second, 1);
+    removeLineBreak(second);
 }
 
 void readLine(char *line, char *command, char *name) {
@@ -83,7 +92,6 @@ element* addName(char *name, element *list, FILE* output) {
     if (isOnList(list, name) == 1) {
         fprintf(output, "[ERROR] ADD ");
         fprintf(output, name);
-        fprintf(output, "\n");
         return list;
     }
 
@@ -103,7 +111,6 @@ element* addName(char *name, element *list, FILE* output) {
     }
     fprintf(output, "[ OK  ] ADD ");
     fprintf(output, name);
-    fprintf(output, "\n");
     return list;
 }
 
@@ -124,7 +131,6 @@ element* removeName(char *name, element *list, FILE* output) {
                 free(trash);
                 fprintf(output, "[ OK  ] REMOVE ");
                 fprintf(output, name);
-                fprintf(output, "\n");
                 i = 1;
             } else {
                 temp = temp->next;
@@ -135,7 +141,6 @@ element* removeName(char *name, element *list, FILE* output) {
     if (i == 0) {
         fprintf(output, "[ERROR] REMOVE ");
         fprintf(output, name);
-        fprintf(output, "\n");
     }
     return temp;
 }
@@ -158,7 +163,6 @@ element* showName(char *name, element* list, FILE* output) {
                 fprintf(output, temp->name);
                 fprintf(output, "->");
                 fprintf(output, temp->next->name);
-                fprintf(output, "\n");
                 i = 1;
             }
             temp = temp->next;
@@ -169,7 +173,6 @@ element* showName(char *name, element* list, FILE* output) {
         fprintf(output, "[ERROR] ?<-");
         fprintf(output, name);
         fprintf(output, "->?");
-        fprintf(output, "\n");
     }
     return list;
 }
@@ -196,7 +199,10 @@ int main(int argc, char* argv[]) {
     char command[7];
     char name[51];
     element *list = NULL;
+    int i = 0;
     while ((read = getline(&line, &len, input)) != -1) {
+        if (i == 0) i++;
+        else fprintf(output, "\n");
         readLine(line, command, name);
         list = executeCommand(command, name, list, output);
     }
